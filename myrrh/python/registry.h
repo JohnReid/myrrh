@@ -33,6 +33,27 @@ get_registration() {
 	}
 }
 
+
+/**
+ * Checks to see if the class is registered and if it is then sets an attribute on the scope, otherwise calls the
+ * expose function in the derived class using the CRTP patter.
+ */
+template< typename Derived >
+struct expose_or_set_attribute
+{
+	void
+	operator()( boost::python::scope & scope, const char * name ) {
+        namespace py = boost::python;
+		auto registration = get_registration< typename Derived::exposed_type >();
+		if( registration ) {
+			scope.attr( name ) = py::handle<>( registration->m_class_object );
+		} else {
+			static_cast< Derived * >( this )->expose( name );
+		}
+	}
+};
+
+
 } //namespace myrrh
 } //namespace python
 

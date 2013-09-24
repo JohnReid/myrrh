@@ -46,7 +46,7 @@ struct PyString {
 			"A Seqan string.",
 			py::init< char const * >( "Initialise a string." )
 		);
-		size_t (* len_fn)(String const &) = S::length;
+		typename S::Size< String >::Type( * len_fn )( String const & ) = S::length< String >;
 		_class.def( "__len__", len_fn, "Length of the index." );
 		_class.def( "__str__", as_string, "Convert to a python string." );
 	}

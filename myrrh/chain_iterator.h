@@ -134,10 +134,10 @@ make_chain_iterator_begin( const Range1 & range_1, const Range2 & range_2 )
 		typename boost::range_const_iterator< Range2 >::type 
 	> iterator;
 	return iterator( 
-		end( range_1 ), 
-		begin( range_2 ), 
-		begin( range_1 ),
-		end( range_2 ),
+		boost::end( range_1 ),
+		boost::begin( range_2 ),
+		boost::begin( range_1 ),
+		boost::end( range_2 ),
 		true
 	);
 }

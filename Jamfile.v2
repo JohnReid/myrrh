@@ -28,16 +28,16 @@ project Myrrh
 	: requirements
 		<include>.
 		<include>$(BOOST_ROOT)
-		<include>$(BOOST_ITL) 
+		# <include>$(BOOST_ITL)  # deprecated
 		<define>BOOST_ALL_NO_LIB # disable boost auto-linking
 		<define>BOOST_FILESYSTEM_VERSION=3
-		<use>/site-config//numpy
+        <use>/site-config//numpy
 		<tag>@debug-tag
                 <toolset>darwin:<linkflags>"-undefined dynamic_lookup"
 	: usage-requirements
 		<include>.
 		<include>$(BOOST_ROOT)
-		<include>$(BOOST_ITL) 
+		#<include>$(BOOST_ITL) # deprecated
 		<define>BOOST_FILESYSTEM_VERSION=3
 		<use>/site-config//numpy
 	;
@@ -145,39 +145,40 @@ bpl-test man_test : _man python_test/test_man.py ;
 #
 # Python interval template library extension
 #
-python-extension _pyitl
-	: # sources
-		src/python/pyitl_module.cpp
-		/boost/python//boost_python
-	:
-		<variant>release:<dll-path>'$ORIGIN/lib'
-		<variant>debug:<dll-path>'$ORIGIN/lib/debug'
-	;
+# DEPRECATED in favour of separate project pyicl
+#
+#python-extension _pyitl
+#	: # sources
+#		src/python/pyitl_module.cpp
+#		/boost/python//boost_python
+#	:
+#		<variant>release:<dll-path>'$ORIGIN/lib'
+#		<variant>debug:<dll-path>'$ORIGIN/lib/debug'
+#	;
 
-bpl-test pyitl_test
-	:
-		python_test/test_pyitl.py
-		_pyitl
-	;
+#bpl-test pyitl_test
+#	:
+#		python_test/test_pyitl.py
+#		_pyitl
+#	;
 
-install install_pyitl_pyd
-	:
-		_pyitl 
-	:
-		<location>Python
-		<install-dependencies>off
-	;
-	
-BIN_DIR = ../../bin ;
-install install_pyitl_so
-	:
-		/boost/python//boost_python
-	:
-		<variant>release:<location>Python/lib
-		<variant>debug:<location>Python/lib/debug
-	;
+#install install_pyitl_pyd
+#	:
+#		_pyitl 
+#	:
+#		<location>Python
+#		<install-dependencies>off
+#	;
+#	
+#install install_pyitl_so
+#	:
+#		/boost/python//boost_python
+#	:
+#		<variant>release:<location>Python/lib
+#		<variant>debug:<location>Python/lib/debug
+#	;
 
-alias install_pyitl : install_pyitl_pyd install_pyitl_so ;
+#alias install_pyitl : install_pyitl_pyd install_pyitl_so ;
 
 
 #
@@ -220,8 +221,7 @@ for local file in [ glob src/sandbox/*.cpp ]
 	exe sandbox_$(target)
 		:
 			$(file)
-		:
-			<include>$(SEQAN_PATH)
+			/site-config//seqan
 		;
 	SANDBOX_TARGETS += sandbox_$(target) ;
 }

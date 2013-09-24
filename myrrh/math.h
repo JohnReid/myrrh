@@ -259,8 +259,8 @@ draw_from_dirichlet(
 	gsl_ran_dirichlet(
 		rng,
 		size( alpha ),
-		&*begin( alpha ),
-		&*begin( output ) );
+		&*boost::begin( alpha ),
+		&*boost::begin( output ) );
 }
 
 

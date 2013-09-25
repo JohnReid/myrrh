@@ -1,7 +1,7 @@
 /**
 @file
 
-Copyright John Reid 2007, 2011
+Copyright John Reid 2007, 2011, 2013
 
 */
 
@@ -19,8 +19,14 @@ Copyright John Reid 2007, 2011
 
 namespace myrrh {
 namespace python {
-namespace impl {
 
+
+template< typename Tuple >
+boost::python::object
+tuple_to_python( const Tuple & x );
+
+
+namespace impl {
 
 
 

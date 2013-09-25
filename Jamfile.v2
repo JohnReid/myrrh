@@ -14,7 +14,6 @@ rule debug-tag ( name : type ? : property-set )
     } else {
         result = "" ;
     }
-    # echo "In rule tag; name='$(name)'; type='$(type)'; returning: '$(result)'" ;
     return "$(result)" ;
 }
 
@@ -28,16 +27,13 @@ project Myrrh
     : requirements
         <include>.
         <include>$(BOOST_ROOT)
-        # <include>$(BOOST_ITL)  # deprecated
         <define>BOOST_ALL_NO_LIB # disable boost auto-linking
         <define>BOOST_FILESYSTEM_VERSION=3
         <use>/site-config//numpy
         <tag>@debug-tag
                 <toolset>darwin:<linkflags>"-undefined dynamic_lookup"
     : usage-requirements
-        <include>.
         <include>$(BOOST_ROOT)
-        #<include>$(BOOST_ITL) # deprecated
         <define>BOOST_FILESYSTEM_VERSION=3
         <use>/site-config//numpy
     ;
@@ -63,6 +59,10 @@ lib myrrh_lib
         src/$(LIB_SRCS).cpp
         /boost/program_options//boost_program_options
         /boost/date_time//boost_date_time
+    :
+    :
+    :
+        <include>.
     ;
 
 
@@ -76,7 +76,83 @@ lib myrrh_pylib
     :
         src/$(PYLIB_SRCS).cpp
         /boost/python//boost_python
+    :
+    :
+    :
+        <include>.
     ;
+
+
+#
+# Python boost range test
+#
+python-extension test_python_boost_range
+    : # sources
+        test/test_python_boost_range.cpp
+        /boost/python//boost_python
+    ;
+explicit test_python_boost_range ;
+
+bpl-test boost_range_test
+    :
+        python_test/test_boost_range.py
+        test_python_boost_range
+    ;
+explicit boost_range_test ;
+TESTS += boost_range_test ;
+
+
+
+#
+# Multi-array to/from numpy extension
+#
+python-extension _man
+    : # sources
+        src/python/man_module.cpp
+        myrrh_pylib
+    ;
+explicit _man ;
+
+bpl-test man_test : _man python_test/test_man.py ;
+explicit man_test ;
+TESTS += man_test ;
+
+
+#
+# Seqan extension
+#
+python-extension _seqan
+    : # sources
+        src/python/seqan_module.cpp
+        /boost/python//boost_python
+    :
+        <use>/site-config//seqan
+    ;
+explicit _seqan ;
+
+bpl-test seqan_test : python_test/test_seqan.py _seqan ;
+explicit seqan_test ;
+TESTS += seqan_test ;
+
+
+
+#
+# Python numpy converter test
+#
+python-extension test_python_numpy_converter
+    : # sources
+        test/test_python_numpy_converter.cpp
+        /boost/python//boost_python
+    ;
+explicit test_python_numpy_converter ;
+
+bpl-test numpy_converter_test
+    :
+        python_test/test_numpy_converter.py
+        test_python_numpy_converter
+    ;
+explicit numpy_converter_test ;
+TESTS += numpy_converter_test ;
 
 
 
@@ -98,9 +174,10 @@ for test_src in $(TEST_SRCS)
         :
             .//myrrh
             test/test_$(test_src).cpp
-            /boost/test//boost_unit_test_framework/<link>static
+            /boost/test//boost_unit_test_framework/
             /site-config//seqan
         :
+            <define>BOOST_TEST_DYN_LINK
             <define>BOOST_ALL_NO_LIB=1
             <define>_SCL_SECURE_NO_WARNINGS
             <define>_CRT_SECURE_NO_WARNINGS
@@ -108,108 +185,8 @@ for test_src in $(TEST_SRCS)
         ;
     explicit test_$(test_src) ;
 }
-alias all_tests : test_$(TEST_SRCS) ;
-
-
-#
-# Python boost range test
-#
-python-extension test_python_boost_range
-    : # sources
-        test/test_python_boost_range.cpp
-        /boost/python//boost_python
-    ;
-
-bpl-test boost_range_test
-    :
-        python_test/test_boost_range.py
-        test_python_boost_range
-    ;
-explicit boost_range_test ;
-
-
-
-#
-# Multi-array to/from numpy extension
-#
-python-extension _man
-    : # sources
-        src/python/man_module.cpp
-        myrrh_pylib
-    ;
-
-bpl-test man_test : _man python_test/test_man.py ;
-
-
-
-#
-# Python interval template library extension
-#
-# DEPRECATED in favour of separate project pyicl
-#
-#python-extension _pyitl
-#    : # sources
-#        src/python/pyitl_module.cpp
-#        /boost/python//boost_python
-#    :
-#        <variant>release:<dll-path>'$ORIGIN/lib'
-#        <variant>debug:<dll-path>'$ORIGIN/lib/debug'
-#    ;
-
-#bpl-test pyitl_test
-#    :
-#        python_test/test_pyitl.py
-#        _pyitl
-#    ;
-
-#install install_pyitl_pyd
-#    :
-#        _pyitl
-#    :
-#        <location>Python
-#        <install-dependencies>off
-#    ;
-#
-#install install_pyitl_so
-#    :
-#        /boost/python//boost_python
-#    :
-#        <variant>release:<location>Python/lib
-#        <variant>debug:<location>Python/lib/debug
-#    ;
-
-#alias install_pyitl : install_pyitl_pyd install_pyitl_so ;
-
-
-#
-# Seqan extension
-#
-python-extension _seqan
-    : # sources
-        src/python/seqan_module.cpp
-        /boost/python//boost_python
-    :
-        <use>/site-config//seqan
-    ;
-
-bpl-test seqan_test : python_test/test_seqan.py _seqan ;
-
-
-
-#
-# Python numpy converter test
-#
-python-extension test_python_numpy_converter
-    : # sources
-        test/test_python_numpy_converter.cpp
-        /boost/python//boost_python
-    ;
-
-bpl-test numpy_converter_test
-    :
-        python_test/test_numpy_converter.py
-        test_python_numpy_converter
-    ;
+alias all_tests : test_$(TEST_SRCS) $(TESTS) ;
+explicit all_tests ;
 
 
 #
@@ -221,10 +198,12 @@ for local file in [ glob src/sandbox/*.cpp ]
     exe sandbox_$(target)
         :
             $(file)
-            /site-config//seqan
+        :
+            <use>/site-config//seqan
         ;
+    explicit sandbox_$(target) ;
     SANDBOX_TARGETS += sandbox_$(target) ;
 }
 alias sandbox : $(SANDBOX_TARGETS) ;
-
+explicit sandbox ;
 

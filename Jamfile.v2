@@ -31,8 +31,9 @@ project Myrrh
         <define>BOOST_FILESYSTEM_VERSION=3
         <use>/site-config//numpy
         <tag>@debug-tag
-                <toolset>darwin:<linkflags>"-undefined dynamic_lookup"
+        <toolset>darwin:<linkflags>"-undefined dynamic_lookup"
     : usage-requirements
+        <include>.
         <include>$(BOOST_ROOT)
         <define>BOOST_FILESYSTEM_VERSION=3
         <use>/site-config//numpy

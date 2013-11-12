@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE( simple_store )
     boost::for_each( ns, make_store_n_best( 3, best ) );
     //boost::for_each( best, cout << _1 << '\n' );
 
-    BOOST_CHECK_EQUAL( boost::size( best ), 3 );
+    BOOST_CHECK_EQUAL( boost::size( best ), 3u );
     BOOST_CHECK( boost::end( best ) != boost::find( best, 8 ) );
     BOOST_CHECK( boost::end( best ) != boost::find( best, 6 ) );
     BOOST_CHECK( boost::end( best ) != boost::find( best, 5 ) );
@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE( store_few )
     BOOST_CHECK( boost::end( best ) != boost::find( best, 4 ) );
     BOOST_CHECK( boost::end( best ) != boost::find( best, 6 ) );
     BOOST_CHECK( boost::end( best ) != boost::find( best, 0 ) );
-    BOOST_CHECK_EQUAL( boost::size( best ), 3 );
+    BOOST_CHECK_EQUAL( boost::size( best ), 3u );
 }
 
 
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE( store_duplicates )
     BOOST_CHECK_EQUAL( 1, boost::count( best, 4 ) );
     BOOST_CHECK_EQUAL( 2, boost::count( best, 6 ) );
     BOOST_CHECK_EQUAL( 0, boost::count( best, 0 ) );
-    BOOST_CHECK_EQUAL( boost::size( best ), 3 );
+    BOOST_CHECK_EQUAL( boost::size( best ), 3u );
 }
 
 

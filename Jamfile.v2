@@ -36,7 +36,6 @@ project Myrrh
         <include>.
         <include>$(BOOST_ROOT)
         <define>BOOST_FILESYSTEM_VERSION=3
-        <define>BOOST_TEST_DYN_LINK  # Use dynamically linked boost.test library
         <use>/site-config//numpy
     ;
 
@@ -181,6 +180,7 @@ for test_src in $(TEST_SRCS)
         :
             # <define>BOOST_ALL_NO_LIB=1
             <define>BOOST_TEST_MAIN
+            <define>BOOST_TEST_DYN_LINK  # Use dynamically linked boost.test library
             <define>_SCL_SECURE_NO_WARNINGS
             <define>_CRT_SECURE_NO_WARNINGS
             <toolset>msvc:<variant>debug:<testing.launcher>=dbg.bat

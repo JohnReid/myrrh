@@ -33,6 +33,7 @@ project Myrrh
         <tag>@debug-tag
         <toolset>darwin:<linkflags>"-undefined dynamic_lookup"
     : usage-requirements
+        <include>.
         <include>$(BOOST_ROOT)
         <define>BOOST_FILESYSTEM_VERSION=3
         <use>/site-config//numpy
@@ -93,13 +94,13 @@ python-extension test_python_boost_range
     ;
 explicit test_python_boost_range ;
 
-bpl-test boost_range_test
+bpl-test boost-range-test
     :
         python_test/test_boost_range.py
         test_python_boost_range
     ;
-explicit boost_range_test ;
-TESTS += boost_range_test ;
+explicit boost-range-test ;
+TESTS += boost-range-test ;
 
 
 
@@ -113,9 +114,9 @@ python-extension _man
     ;
 explicit _man ;
 
-bpl-test man_test : _man python_test/test_man.py ;
-explicit man_test ;
-TESTS += man_test ;
+bpl-test man-test : _man python_test/test_man.py ;
+explicit man-test ;
+TESTS += man-test ;
 
 
 #
@@ -130,9 +131,9 @@ python-extension _seqan
     ;
 explicit _seqan ;
 
-bpl-test seqan_test : python_test/test_seqan.py _seqan ;
-explicit seqan_test ;
-TESTS += seqan_test ;
+bpl-test seqan-test : python_test/test_seqan.py _seqan ;
+explicit seqan-test ;
+TESTS += seqan-test ;
 
 
 
@@ -146,13 +147,13 @@ python-extension test_python_numpy_converter
     ;
 explicit test_python_numpy_converter ;
 
-bpl-test numpy_converter_test
+bpl-test numpy-converter-test
     :
         python_test/test_numpy_converter.py
         test_python_numpy_converter
     ;
-explicit numpy_converter_test ;
-TESTS += numpy_converter_test ;
+explicit numpy-converter-test ;
+TESTS += numpy-converter-test ;
 
 
 
@@ -183,8 +184,8 @@ for test_src in $(TEST_SRCS)
         ;
     explicit test_$(test_src) ;
 }
-alias all_tests : test_$(TEST_SRCS) $(TESTS) ;
-explicit all_tests ;
+alias all-tests : test_$(TEST_SRCS) $(TESTS) ;
+explicit all-tests ;
 
 
 #

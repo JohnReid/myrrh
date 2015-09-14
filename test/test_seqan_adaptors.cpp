@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE( check_string_set_iterator )
 
     string_set_t string_set;
     seqan::appendValue( string_set, "ACGTGGACTGCGCTAGGCTCGCGC" );
-    BOOST_CHECK_EQUAL( 1, seqan::length( string_set ) );
+    BOOST_CHECK_EQUAL( 1u, seqan::length( string_set ) );
 
     BOOST_FOREACH( string_t & s, string_set ) {
         cout << seqan::length( s ) << "\n";

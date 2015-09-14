@@ -1,9 +1,11 @@
 /**
 @file
 
-Copyright John Reid 2007
+Copyright John Reid 2007, 2015
 
 */
+
+#define BOOST_TEST_MODULE suffix tree  // Define test module name
 
 #ifdef _DEBUG
 #define MYRRH_DEBUG_SUFFIX_TREE

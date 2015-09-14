@@ -31,7 +31,7 @@ project Myrrh
         <define>BOOST_FILESYSTEM_VERSION=3
         <use>/site-config//numpy
         <tag>@debug-tag
-                <toolset>darwin:<linkflags>"-undefined dynamic_lookup"
+        <toolset>darwin:<linkflags>"-undefined dynamic_lookup"
     : usage-requirements
         <include>$(BOOST_ROOT)
         <define>BOOST_FILESYSTEM_VERSION=3
@@ -177,8 +177,6 @@ for test_src in $(TEST_SRCS)
             /boost/test//boost_unit_test_framework/
             /site-config//seqan
         :
-            <define>BOOST_TEST_DYN_LINK
-            <define>BOOST_ALL_NO_LIB=1
             <define>_SCL_SECURE_NO_WARNINGS
             <define>_CRT_SECURE_NO_WARNINGS
             <toolset>msvc:<variant>debug:<testing.launcher>=dbg.bat

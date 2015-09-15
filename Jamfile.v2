@@ -114,9 +114,9 @@ python-extension _man
     ;
 explicit _man ;
 
-bpl-test man-test : _man python_test/test_man.py ;
-explicit man-test ;
-TESTS += man-test ;
+bpl-test man_test : _man python_test/test_man.py ;
+explicit man_test ;
+TESTS += man_test ;
 
 
 #
